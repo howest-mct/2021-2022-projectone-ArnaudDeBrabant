@@ -14,23 +14,27 @@ from selenium import webdriver
 # from selenium.webdriver.chrome.options import Options
 
 
-counter = 0
-sensor = 23
+ledPin = 21
+btnPin = Button(20)
 
 # Code voor Hardware
 def setup_gpio():
     GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BCM)
-    GPIO.setup(sensor, GPIO.IN, pull_up_down = GPIO.PUD_UP)
-    GPIO.add_event_detect(sensor, GPIO.FALLING, callback=active, bouncetime=1000) 
+
+    GPIO.setup(ledPin, GPIO.OUT)
+    GPIO.output(ledPin, GPIO.LOW)
     
+    btnPin.on_press(lees_knop)
 
 
-def active(null):
-    global counter
-    counter+=1
-    print(counter)
-
+def lees_knop(pin):
+    if btnPin.pressed:
+        print("**** button pressed ****")
+        if GPIO.input(ledPin) == 1:
+            switch_light({'lamp_id': '3', 'new_status': 0})
+        else:
+            switch_light({'lamp_id': '3', 'new_status': 1})
 
 
 
