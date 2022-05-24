@@ -65,40 +65,40 @@ def initial_connection():
     # # Send to the client!
     # vraag de status op van de lampen uit de DB
     status = DataRepository.read_status_device()
-    emit('B2F_status_device', {'lampen': status}, broadcast=True)
+    emit('B2F_status_device', {'device': status}, broadcast=True)
 
 
-@socketio.on('F2B_switch_light')
-def switch_light(data):
-    # Ophalen van de data
-    lamp_id = data['lamp_id']
-    new_status = data['new_status']
-    print(f"Lamp {lamp_id} wordt geswitcht naar {new_status}")
+# @socketio.on('F2B_switch_light')
+# def switch_light(data):
+#     # Ophalen van de data
+#     lamp_id = data['lamp_id']
+#     new_status = data['new_status']
+#     print(f"Lamp {lamp_id} wordt geswitcht naar {new_status}")
 
-    # Stel de status in op de DB
-    res = DataRepository.update_status_lamp(lamp_id, new_status)
+#     # Stel de status in op de DB
+#     res = DataRepository.update_status_lamp(lamp_id, new_status)
 
-    # Vraag de (nieuwe) status op van de lamp en stuur deze naar de frontend.
-    data = DataRepository.read_status_lamp_by_id(lamp_id)
-    socketio.emit('B2F_verandering_lamp', {'lamp': data}, broadcast=True)
+#     # Vraag de (nieuwe) status op van de lamp en stuur deze naar de frontend.
+#     data = DataRepository.read_status_lamp_by_id(lamp_id)
+#     socketio.emit('B2F_verandering_lamp', {'lamp': data}, broadcast=True)
 
-    # Indien het om de lamp van de TV kamer gaat, dan moeten we ook de hardware aansturen.
-    if lamp_id == '3':
-        print(f"TV kamer moet switchen naar {new_status} !")
-        GPIO.output(ledPin, new_status)
+#     # Indien het om de lamp van de TV kamer gaat, dan moeten we ook de hardware aansturen.
+#     if lamp_id == '3':
+#         print(f"TV kamer moet switchen naar {new_status} !")
+#         GPIO.output(ledPin, new_status)
 
 
 
 # START een thread op. Belangrijk!!! Debugging moet UIT staan op start van de server, anders start de thread dubbel op
 # werk enkel met de packages gevent en gevent-websocket.
-def all_out():
-    while True:
-        print('*** We zetten alles uit **')
-        DataRepository.update_status_alle_lampen(0)
-        GPIO.output(ledPin, 0)
-        status = DataRepository.read_status_lampen()
-        socketio.emit('B2F_status_lampen', {'lampen': status})
-        time.sleep(15)
+# def all_out():
+#     while True:
+#         print('*** We zetten alles uit **')
+#         DataRepository.update_status_alle_lampen(0)
+#         GPIO.output(ledPin, 0)
+#         status = DataRepository.read_status_lampen()
+#         socketio.emit('B2F_status_lampen', {'lampen': status})
+#         time.sleep(15)
 
 def start_thread():
     print("**** Starting THREAD ****")
