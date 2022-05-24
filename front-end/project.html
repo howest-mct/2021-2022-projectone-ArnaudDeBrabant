@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="nl">
 
@@ -7,9 +8,11 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>SmartBall</title>
     <link rel="stylesheet" href="style/screen.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
-        integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="bower_components/heatcanvas/heatcanvas.js"></script>
+
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"
+        integrity="sha384-LzhRnpGmQP+lOvWruF/lgkcqD+WDVt9fU3H4BWmwP5u5LTmkUGafMcpZKNObVMLU"
+        crossorigin="anonymous"></script>
+   
     <script src="script/app.js"></script>
 </head>
 
@@ -27,6 +30,7 @@
                                 <li class="c-nav__item"><a href="project.html" class="c-nav__link">Home</a></li>
                                 <li class="c-nav__item"><a href="jongleren.html" class="c-nav__link">Jongleren</a></li>
                                 <li class="c-nav__item"><a href="snelheid.html" class="c-nav__link">Snelheid Meten</a></li>
+                                <li class="c-nav__item"><a href="geschiedenis.html" class="c-nav__link">geschiedenis</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -36,7 +40,10 @@
     </header>
     </div>
     <div class="o-container o-layout--justify-space-between ">
-        <div class="o-body u-1-of-4-bp4">
+        <div class="o-body u-1-of-2-bp4">
+
+        </div>
+        <div class="o-body u-1-of-2-bp4">
             <div class="o-body--title">
                 Scorebord
             </div>
@@ -47,6 +54,13 @@
                     <img src="img/uvlamp_on.svg" alt="UV aan">
                 </div>
     
+            </div>
+        </div>
+        <div class="o-body u-1-of-2-bp4">
+            <div class="o-body--title">
+                Scorebord
+            </div>
+            <div class="o-body__content--lampen">
                 <div class="o-body__content--lampen-warmte">
                     <p>Snelheid</p>
                     <img src="img/heatlamp_on.svg" alt="warmtelamp aan">
@@ -54,6 +68,7 @@
     
             </div>
         </div>
+        
     </div>
 
 </body>

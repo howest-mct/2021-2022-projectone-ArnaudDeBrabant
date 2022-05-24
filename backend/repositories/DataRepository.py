@@ -12,7 +12,7 @@ class DataRepository:
 
     @staticmethod
     def read_status_device():
-        sql = "SELECT * from device"
+        sql = "SELECT * from historiek"
         return Database.get_rows(sql)
 
     @staticmethod

@@ -4,7 +4,7 @@ import time
 GPIO.setmode(GPIO.BCM)
 
 counter =0
-sensor = 23
+sensor = 16
 
 GPIO.setup(sensor, GPIO.IN, pull_up_down = GPIO.PUD_UP)
 
