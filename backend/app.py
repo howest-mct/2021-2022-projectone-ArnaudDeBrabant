@@ -64,8 +64,8 @@ def initial_connection():
     print('A new client connect')
     # # Send to the client!
     # vraag de status op van de lampen uit de DB
-    status = DataRepository.read_status_lampen()
-    emit('B2F_status_lampen', {'lampen': status}, broadcast=True)
+    status = DataRepository.read_status_device()
+    emit('B2F_status_device', {'lampen': status}, broadcast=True)
 
 
 @socketio.on('F2B_switch_light')
