@@ -14,6 +14,19 @@ from selenium import webdriver
 # from selenium.webdriver.chrome.options import Options
 
 
+
+counter =0
+sensor = 16
+
+def setup_gpio():
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(sensor, GPIO.IN, pull_up_down = GPIO.PUD_UP)
+
+def active(null):
+    global counter
+    counter+=1
+    print(counter)
+
 # Code voor Flask
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'geheim!'
@@ -35,16 +48,6 @@ endpoint = '/api/v1'
 @app.route('/')
 def hallo():
     return "Server is running."
-
-
-# @app.route(endpoint + '/device/today/', methods=['GET'])
-# def sens_today():
-#     if request.method == 'GET':
-#         data = DataRepository.read_sensor_gesch_today()
-#         if data is not None:
-#             return jsonify(sensors=data), 200
-#         else:
-#             return jsonify(data="ERROR"), 404
 
 
 @app.route(endpoint + '/device/', methods=['GET'])
@@ -125,8 +128,8 @@ def start_chrome_thread():
 
 if __name__ == '__main__':
     try:
-        # setup_gpio()
-        # start_thread()
+        setup_gpio()
+        start_thread()
         start_chrome_thread()
         print("**** Starting APP ****")
         socketio.run(app, debug=False, host='0.0.0.0')
