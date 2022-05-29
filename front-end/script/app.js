@@ -23,12 +23,12 @@ const showHistory = function (jsonObject) {
   document.querySelector('.js-table').innerHTML = stringHTML;
 };
 
-const showgetal=function(jsonObject){
-  const waarde= jsonObject.aantal
+const showgetal = function (jsonObject) {
+  const waarde = jsonObject.aantal
   console.log(jsonObject)
-  let html =""
-  html+=`${waarde}`
-  document.querySelector('.js-counter').innerHTML=html
+  let html = ""
+  html += `${waarde}`
+  document.querySelector('.js-counter').innerHTML = html
 }
 
 
@@ -40,9 +40,11 @@ const showgetal=function(jsonObject){
 
 // #region ***  Data Access - get___                     ***********
 const loadHistory = function () {
-  const url = `http://192.168.168.169:5000/api/v1/device/`;
+  const url = `http://192.168.168.169:5000/api/v1/historiek/`;
   handleData(url, showHistory);
 };
+
+
 
 // #endregion
 
@@ -51,11 +53,11 @@ const listenToSocket = function () {
   socket.on("connect", function () {
     console.log("verbonden met socket webserver");
   });
-  socket.on("B2F_connect", function(jsonObject) {
+  socket.on("B2F_connect", function (jsonObject) {
     showgetal(jsonObject);
   });
 };
-const listenToUI=function(){
+const listenToUI = function () {
   // socket.on("B2F_connect", function(jsonObject){
   //   console.log("counter verbonden")
   //   console.log(jsonObject)

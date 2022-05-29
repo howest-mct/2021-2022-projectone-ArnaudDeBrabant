@@ -16,10 +16,9 @@ class DataRepository:
         return Database.get_rows(sql)
 
     @staticmethod
-    def read_status_lamp_by_id(id):
-        sql = "SELECT * from lampen WHERE id = %s"
-        params = [id]
-        return Database.get_one_row(sql, params)
+    def read_score():
+        sql = "SELECT * from score"
+        return Database.get_one_row(sql)
 
     @staticmethod
     def update_status_lamp(id, status):

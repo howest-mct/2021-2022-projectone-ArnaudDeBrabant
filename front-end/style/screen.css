@@ -459,8 +459,8 @@ a:focus {
 
 	margin: auto;
 	margin-top: 16px;
-	height: 243px;
-	max-width: 313px !important;
+	height:fit-content;
+	max-width:fit-content !important;
 	border-radius: 30px;
 	text-align: center;
 	width: 100%;

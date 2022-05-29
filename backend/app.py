@@ -43,7 +43,7 @@ def hallo():
     return "Server is running."
 
 
-@app.route(endpoint + '/device/', methods=['GET'])
+@app.route(endpoint + '/historiek/', methods=['GET'])
 def sensors():
     if request.method == 'GET':
         data = DataRepository.read_status_device()
