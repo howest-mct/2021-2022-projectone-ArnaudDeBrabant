@@ -31,6 +31,13 @@ const showgetal = function (jsonObject) {
   document.querySelector('.js-counter').innerHTML = html
 }
 
+const showrfid = function (jsonObject) {
+  console.log(jsonObject)
+  let html = ""
+  html += `${jsonObject.rfid}`
+  document.querySelector('.js-rfid').innerHTML = html
+}
+
 
 
 // #endregion

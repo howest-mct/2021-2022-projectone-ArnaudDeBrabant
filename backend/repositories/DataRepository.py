@@ -21,13 +21,7 @@ class DataRepository:
         return Database.get_one_row(sql)
 
     @staticmethod
-    def update_status_lamp(id, status):
-        sql = "UPDATE lampen SET status = %s WHERE id = %s"
-        params = [status, id]
-        return Database.execute_sql(sql, params)
-
-    @staticmethod
-    def update_status_alle_lampen(status):
-        sql = "UPDATE lampen SET status = %s"
-        params = [status]
+    def read_rfid(RFID, naam):
+        sql = "INSERT INTO gebruiker (RFID_tag, Naam) VALUES (%s, %s)"
+        params = [RFID, naam]
         return Database.execute_sql(sql, params)

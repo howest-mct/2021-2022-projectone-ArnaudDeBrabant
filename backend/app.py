@@ -1,27 +1,33 @@
 import time
 from RPi import GPIO
 from helpers.klasseknop import Button
+from helpers.LCD import LCD
 import threading
 
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit, send
 from flask import Flask, jsonify, request
 from repositories.DataRepository import DataRepository
+from subprocess import check_output
 
 from selenium import webdriver
-
+from mfrc522 import SimpleMFRC522
 # from selenium import webdriver
 # from selenium.webdriver.chrome.options import Options
 
 #  HARDWARE
 
-counter =0
+counter = 0
 sensor = 16
 
+
 def setup_gpio():
+    global reader
     GPIO.setmode(GPIO.BCM)
-    GPIO.setup(sensor, GPIO.IN, pull_up_down = GPIO.PUD_UP)
-    GPIO.add_event_detect(sensor, GPIO.FALLING, callback=active, bouncetime=1000) 
+    GPIO.setup(sensor, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.add_event_detect(sensor, GPIO.FALLING,
+                          callback=active, bouncetime=1000)
+    reader = SimpleMFRC522()
 
 
 # FLASK
@@ -31,7 +37,6 @@ socketio = SocketIO(app, cors_allowed_origins="*", logger=False,
                     engineio_logger=False, ping_timeout=1)
 
 CORS(app)
-
 
 
 # API ENDPOINTS
@@ -53,14 +58,16 @@ def sensors():
             return jsonify(data="ERROR"), 404
 
 # SOCKET
-@socketio.on_error()        
+
+
+@socketio.on_error()
 def error_handler(e):
     print(e)
 
 
 def active(null):
     global counter
-    counter+=1
+    counter += 1
     socketio.emit("B2F_connect", {'aantal': counter}, broadcast=False)
     print(counter)
 
@@ -70,22 +77,46 @@ def initial_connection():
     print('A new client connect')
 
 
-# START een thread op. Belangrijk!!! Debugging moet UIT staan op start van de server, anders start de thread dubbel op
-# werk enkel met de packages gevent en gevent-websocket.
-# def all_out():
-#     while True:
-#         print('*** We zetten alles uit **')
-#         DataRepository.update_status_alle_lampen(0)
-#         GPIO.output(ledPin, 0)
-#         status = DataRepository.read_status_lampen()
-#         socketio.emit('B2F_status_lampen', {'lampen': status})
-#         time.sleep(15)
+# ------- LCD DISPLAY -------
+def show_ip():
+    DB = [26, 19, 13, 6, 5, 17, 18, 21]
+    E = 24
+    RS = 4
+    display = LCD(E, RS, DB)
+
+    while True:
+        display.clear()
+        try:
+            ips = str(check_output(['hostname', '--all-ip-addresses']))
+            # Haal b' en \\n eruit en splits in een array op een spatie
+            ips = ips.strip("b'").strip(" \\n").split(" ")
+            # Wifi IP = index 1 bij mij
+            ip = ips[1]
+        except Exception as e:
+            ip = "Not found..."
+
+        display.send_message(f"IP:")
+        display.second_row()
+        display.send_message(ip)
+        display.cursor_off()
+        time.sleep(30)
 
 
-# def start_thread():
-#     print("**** Starting THREAD ****")
-#     thread = threading.Thread(target=all_out, args=(), daemon=True)
-#     thread.start()
+#-------------RFID------------------#
+
+def read_rfid():
+    print("**** Starting RFID ****")
+    id, text = reader.read()
+    if id != " ":
+        print("ID: %s\nText: %s" % (id, text))
+        naam = text
+        answer = DataRepository.read_rfid(id, naam)
+        socketio.emit('B2F_refresh_history', broadcast=True)
+
+
+def start_thread_rfid():
+    thread2 = threading.Thread(target=read_rfid, args=(), daemon=True)
+    thread2.start()
 
 
 def start_chrome_kiosk():
@@ -130,6 +161,9 @@ def start_chrome_thread():
 if __name__ == '__main__':
     try:
         setup_gpio()
+        start_thread_rfid()
+        # thread_show_ip = threading.Thread(target=show_ip)
+        # thread_show_ip.start()
         # start_thread()
         start_chrome_thread()
         print("**** Starting APP ****")
