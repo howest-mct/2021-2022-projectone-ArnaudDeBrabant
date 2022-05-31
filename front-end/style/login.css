@@ -96,6 +96,7 @@ span.validate-tooltip {
   -webkit-transition: all 0.3s linear;
   transition: all 0.3s linear;
 }
+
 .input-group input {
   outline: none;
   display: block;

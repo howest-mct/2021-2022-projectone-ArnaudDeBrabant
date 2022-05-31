@@ -34,8 +34,8 @@ const showgetal = function (jsonObject) {
 const showrfid = function (jsonObject) {
   console.log(jsonObject)
   let html = ""
-  html += `${jsonObject.rfid}`
-  document.querySelector('.js-rfid').innerHTML = html
+  html += `${jsonObject.id}`
+  document.querySelector('.js-RFID').value = html
 }
 
 
@@ -63,6 +63,11 @@ const listenToSocket = function () {
   socket.on("B2F_connect", function (jsonObject) {
     showgetal(jsonObject);
   });
+  socket.on("B2F_refresh_history", function (jsonObject) {
+    console.log(jsonObject.id)
+    showrfid(jsonObject);
+  });
+
 };
 const listenToUI = function () {
   // socket.on("B2F_connect", function(jsonObject){

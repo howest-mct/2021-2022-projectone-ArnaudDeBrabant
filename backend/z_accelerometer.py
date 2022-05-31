@@ -2,6 +2,8 @@ from asyncore import read
 from smbus import SMBus
 from RPi import GPIO
 import time 
+import math
+
 
 ################
 i2c = SMBus()
@@ -70,7 +72,13 @@ def accelero(addr):
 
     return graden
 
-      
+def versnelling():
+    x = accelero(0x3B)
+    y = accelero(0x3D)
+    z = accelero(0x3F)
+
+    accel = math.sqrt(x** 2+y** 2+z** 2)
+    return accel
 
 try:
     setup(addr)
@@ -82,8 +90,9 @@ try:
         y = accelero(0x3D)
         z = accelero(0x3F)
 
-        print(f"==================\ntemp: {tet}°C\nx accelereo: {x}\ny accelereo: {y}\nz accelereo: {z}\n==================")
 
+        print(f"==================\ntemp: {tet}°C\nx accelereo: {x}\ny accelereo: {y}\nz accelereo: {z}\n==================")
+        print (f"Versnelling: {versnelling()}")
 
 
         
