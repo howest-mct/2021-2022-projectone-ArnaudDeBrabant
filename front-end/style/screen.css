@@ -23,6 +23,7 @@ html {
 	box-sizing: border-box;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	text-align: center;
 }
 
 body {
@@ -35,165 +36,136 @@ body.active {
 	background: #dfe6df;
 }
 
-.power {
-	margin: auto;
-	margin-top: 20px;
-	background: #38434a;
-	border-radius: 5px;
-	color: white;
-	cursor: pointer;
-	font-family: Roboto;
-	font-size: 1.5em;
-	height: 65px;
-	letter-spacing: 0.2px;
-	text-align: center;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-	width: 150px;
-	transition: none;
+::selection {
+    background: #3385FF;
+    color: white;
+    text-shadow: none;
 }
 
 /*------------------------------------*\
+  #Elements
 \*------------------------------------*/
 
-.sensoren {
-	margin: auto;
-	margin-top: 20px;
-	background: #38434a;
-	border-radius: 5px;
-	color: white;
-	width: 150px;
-	text-align: center;
+/*
+    Elements: Images
+    ---
+    Default markup for images to make them responsive
+*/
+
+img {
+    max-width: 100%;
+    vertical-align: top;
 }
+
+/*
+    Elements: typography
+    ---
+    Default markup for typographic elements
+*/
+
+h1,
+h2,
+h3 {
+    font-weight: 700;
+    color: #83859E;
+}
+
+h1 {
+    font-size: 34px;
+    line-height: 48px;
+    margin: 0 0 24px;
+    color: #20223A;
+}
+
+h2 {
+    font-size: 32px;
+    line-height: 40px;
+    margin: 0 0 24px;
+    color: green;
+}
+
+h3 {
+    font-size: 26px;
+    line-height: 32px;
+    margin: 0 0 24px;
+    color: #20223A;
+}
+
+h4,
+h5,
+h6 {
+    font-size: 20px;
+    line-height: 24px;
+    margin: 0 0 24px;
+    color: #20223A;
+}
+
+p,
+ol,
+ul,
+dl,
+table,
+address,
+figure {
+    margin: 0 0 24px;
+}
+
+ul,
+ol {
+    padding-left: 24px;
+}
+
+li ul,
+li ol {
+    margin-bottom: 0;
+}
+
+
+blockquote {
+    font-style: normal;
+    font-size: 23px;
+    line-height: 32px;
+    margin: 0 0 24px;
+}
+
+blockquote * {
+    font-size: inherit;
+    line-height: inherit;
+}
+
+figcaption {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    margin-top: 8px;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background: LightGrey;
+    margin: 0 0 24px;
+}
+
+a {
+    color: #3385FF;
+    transition: all .1s ease-in-out;
+}
+
+a:visited,
+a:active {
+    color: #3385FF;
+}
+
+a:hover,
+a:focus {
+    color: #4F95FF;
+}
+
 
 /*------------------------------------*\
-  #Elements LEDBULB
-\*------------------------------------*/
+\*------------------------------------
 
-.power:hover {
-	background: #414e56;
-}
-.power:active {
-	box-shadow: inset 0px 4px 10px 0px #2d363b;
-	transition: background 0.14s ease-in;
-}
-.active .power {
-	background: #58c48d;
-}
-.active .power:active {
-	box-shadow: inset 0px 6px 8px -1px #41b77b;
-}
-
-#canv {
-}
-
-#on {
-	-webkit-transform: translate(50%, 50%) scale(0);
-	transform: translate(50%, 50%) scale(0);
-	opacity: 0;
-}
-.active #on {
-	opacity: 1;
-	-webkit-transform: translate(0) scale(1);
-	transform: translate(0) scale(1);
-	transition: all 0.14s ease-in;
-}
-
-.fancy-bulb {
-	position: relative;
-	max-width: 50px;
-}
-
-.streaks,
-.streaks:after,
-.streaks:before {
-	position: absolute;
-	background: #ffdb55;
-	border-radius: 5.5px;
-	height: 11px;
-}
-
-.streaks:after,
-.streaks:before {
-	content: '';
-	display: block;
-}
-
-.streaks:before {
-	bottom: 65px;
-}
-
-.streaks:after {
-	top: 65px;
-}
-
-.left-streaks {
-	right: 217px;
-	top: 89.5px;
-}
-.active .left-streaks {
-	-webkit-animation: move-left 0.38s ease-out, width-to-zero 0.38s ease-out;
-	animation: move-left 0.38s ease-out, width-to-zero 0.38s ease-out;
-	-webkit-animation-delay: 0.14s;
-	animation-delay: 0.14s;
-}
-.left-streaks:before,
-.left-streaks:after {
-	left: 15px;
-}
-.active .left-streaks:before {
-	-webkit-animation: width-to-zero 0.38s ease-out, move-up 0.38s ease-out;
-	animation: width-to-zero 0.38s ease-out, move-up 0.38s ease-out;
-	-webkit-animation-delay: 0.14s;
-	animation-delay: 0.14s;
-}
-.active .left-streaks:after {
-	-webkit-animation: width-to-zero 0.38s ease-out, move-down 0.38s ease-out;
-	animation: width-to-zero 0.38s ease-out, move-down 0.38s ease-out;
-	-webkit-animation-delay: 0.14s;
-	animation-delay: 0.14s;
-}
-
-.right-streaks {
-	left: 217px;
-	top: 89.5px;
-}
-.active .right-streaks {
-	-webkit-animation: move-right 0.38s ease-out, width-to-zero 0.38s ease-out;
-	animation: move-right 0.38s ease-out, width-to-zero 0.38s ease-out;
-	-webkit-animation-delay: 0.14s;
-	animation-delay: 0.14s;
-}
-.right-streaks:before,
-.right-streaks:after {
-	right: 15px;
-}
-.active .right-streaks:before {
-	-webkit-animation: width-to-zero 0.38s ease-out, move-up 0.38s ease-out;
-	animation: width-to-zero 0.38s ease-out, move-up 0.38s ease-out;
-	-webkit-animation-delay: 0.14s;
-	animation-delay: 0.14s;
-}
-.active .right-streaks:after {
-	-webkit-animation: width-to-zero 0.38s ease-out, move-down 0.38s ease-out;
-	animation: width-to-zero 0.38s ease-out, move-down 0.38s ease-out;
-	-webkit-animation-delay: 0.14s;
-	animation-delay: 0.14s;
-}
-
-.left-streaks:before,
-.right-streaks:after {
-	-webkit-transform: rotate(34deg);
-	transform: rotate(34deg);
-}
-
-.left-streaks:after,
-.right-streaks:before {
-	-webkit-transform: rotate(-34deg);
-	transform: rotate(-34deg);
-}
 
 /*
     Component: header
@@ -292,6 +264,7 @@ body.active {
 
 .c-nav__list {
 	display: flex;
+	margin-top: 20px;
 }
 
 .c-nav__link {
@@ -400,6 +373,67 @@ body.active {
     border-bottom: 1px solid #dddddd;
 }
 
+.c-intro {
+    position:relative;
+}
+
+@media (max-width: 991px) {
+    .c-intro__figure {
+        display: none;
+    }
+}
+
+@media (min-width: 1200px) {
+    .c-intro {
+        margin-bottom: -96px;
+    }
+
+    .c-intro__body {
+        position: relative;
+        top: -48px;
+    }
+}
+
+/*
+    Component: Lead
+    ---
+    Lead type treatments to style everything that differs from standard typography elements
+*/
+
+.c-lead {
+    position: relative;
+}
+
+.c-lead--md {
+    font-size: 18px;
+    line-height: 32px;
+}
+
+.c-lead--lg {
+    font-size: 20px;
+    line-height: 32px;
+}
+
+.c-lead--xl {
+    font-size: 32px;
+    line-height: 40px;
+}
+
+@media (min-width: 768px) {
+    .c-lead--xl {
+        font-size: 41px;
+        line-height: 48px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .c-lead--xl {
+        font-size: 52px;
+        line-height: 64px;
+    }
+}
+
+
 /*
     Objects: List
     ---
@@ -425,8 +459,8 @@ body.active {
 
 	margin: auto;
 	margin-top: 16px;
-	height: 243px;
-	max-width: 313px !important;
+	height:fit-content;
+	max-width:fit-content !important;
 	border-radius: 30px;
 	text-align: center;
 	width: 100%;
@@ -1069,6 +1103,67 @@ img{
     width: 100%;
     max-width: 57.375em; /* 57.375 * 16px = 918px */
 }
+
+.o-container_counter{
+	margin-left: auto;
+	margin-right: auto;
+	width: 100%;
+	max-width: 40em;
+	margin-top: 200px;
+}
+
+.o-row_body {
+    position: relative;
+    padding: 24px 24px 0;
+    display: flow-root;
+}
+.o-row_body--dark{
+    background-color:#20223A;
+}
+
+.o-row_body--header{
+
+}
+
+.o-row_body--intro {
+    z-index: 10;
+}
+
+/* size modifiers */
+
+.o-row_body--lg {
+    padding-top: 48px;
+    padding-bottom: 24px;
+}
+
+.o-row_body--xl {
+    padding-top: 72px;
+    padding-bottom: 48px;
+}
+
+@media (min-width: 768px) {
+    .o-row_body {
+        padding-left: 48px;
+        padding-right: 48px;
+    }
+
+    .o-row_body--md {
+        padding-top: 48px;
+        padding-bottom: 24px;
+    }
+
+    .o-row_body--lg {
+        padding-top: 72px;
+        padding-bottom: 48px;
+    }
+}
+
+@media (min-width: 992px) {
+    .o-row_body--xl {
+        padding-top: 96px;
+        padding-bottom: 72px;
+    }
+}
 /*
     Objects: section
     ---
@@ -1464,4 +1559,21 @@ img{
     h3 {
         page-break-after: avoid;
     }
+}
+
+.counter{
+	font-size: 56px;
+	font-family: 'WorkSans', Helvetica, arial, sans-serif;
+	color: green;
+}
+
+.counter-box {
+  width: 320px;
+  padding: 10px;
+  border: 5px solid green;
+  margin: 0;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 20px;
 }
