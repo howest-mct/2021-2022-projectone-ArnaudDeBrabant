@@ -103,17 +103,36 @@ def show_ip():
 
 
 #-------------RFID------------------#
+@socketio.on('F2B_rfid')
+def controle_id(jsonObject):
+    print('hello')
+    print(jsonObject)
+    id = DataRepository.check_id(jsonObject['id'])
+    id_dict=(id['RFID_tag'])
+
+
+    print(jsonObject['id'])
+    if id:
+        print('succesvol ingelogd')
+
+    else:
+        print('fout')
+    
+
+
+
 
 def read_rfid():
     print("**** Starting RFID ****")
     id, text = reader.read()
-    vorigid = id
+    # vorigid = id
     if id != " ":
         # if id != vorigid:
         print("ID: %s\nText: %s" % (id, text))
         naam = text
         answer = DataRepository.read_rfid(id, naam)
-        socketio.emit('B2F_refresh_history', {"id":id}, broadcast=True)
+        socketio.emit('B2F_refresh_history', {"id": id, "naam": naam}, broadcast=True)
+        socketio.emit('B2F_name', {"naam":naam}, broadcast=True)
         time.sleep(0.5)
 
         # else:
@@ -122,6 +141,7 @@ def read_rfid():
         #     naam = text
         #     answer = DataRepository.read_rfid(id, naam)
         #     socketio.emit('B2F_refresh_history', broadcast=True)
+    
 
 
 #-------------------MPU6502------------------#

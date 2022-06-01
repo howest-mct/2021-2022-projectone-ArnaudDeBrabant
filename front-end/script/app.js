@@ -36,6 +36,15 @@ const showrfid = function (jsonObject) {
   let html = ""
   html += `${jsonObject.id}`
   document.querySelector('.js-RFID').value = html
+  const payload = {id:jsonObject.id, naam:jsonObject.naam};
+  socket.emit('F2B_rfid', payload);
+  console.log('hallo2')
+}
+const shownaam = function (jsonObject) {
+  console.log(jsonObject)
+  let html = ""
+  html += `${jsonObject.naam}`
+  document.querySelector('.js-Naam').value = html
 }
 
 
@@ -67,6 +76,11 @@ const listenToSocket = function () {
     console.log(jsonObject.id)
     showrfid(jsonObject);
   });
+  socket.on("B2F_name", function (jsonObject) {
+    console.log(jsonObject.naam)
+    shownaam(jsonObject);
+  });
+
 
 };
 const listenToUI = function () {
