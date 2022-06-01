@@ -91,7 +91,7 @@ def show_ip():
             # Haal b' en \\n eruit en splits in een array op een spatie
             ips = ips.strip("b'").strip(" \\n").split(" ")
             # Wifi IP = index 1 bij mij
-            ip = ips[0]
+            ip = ips[1]
         except Exception as e:
             ip = "Not found..."
 
