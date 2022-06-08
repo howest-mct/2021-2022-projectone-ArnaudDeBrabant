@@ -12,6 +12,7 @@ from subprocess import check_output
 
 from selenium import webdriver
 from mfrc522 import SimpleMFRC522
+from helpers.MPU6050 import MPU6050
 # from selenium import webdriver
 # from selenium.webdriver.chrome.options import Options
 
@@ -25,8 +26,7 @@ def setup_gpio():
     global reader
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(sensor, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.add_event_detect(sensor, GPIO.FALLING,
-                          callback=active, bouncetime=1000)
+    GPIO.add_event_detect(sensor, GPIO.FALLING, callback=active, bouncetime=1000)
     reader = SimpleMFRC522()
 
 
@@ -103,15 +103,102 @@ def show_ip():
 
 
 #-------------RFID------------------#
+@socketio.on('F2B_rfid')
+def controle_id(jsonObject):
+    print('hello')
+    print(jsonObject)
+    id = DataRepository.check_id(jsonObject['id'])
+    id_dict=(id['RFID_tag'])
+
+
+    print(jsonObject['id'])
+    if id:
+        print('succesvol ingelogd')
+
+    else:
+        print('fout')
+    
+
+
+
 
 def read_rfid():
     print("**** Starting RFID ****")
     id, text = reader.read()
+    # vorigid = id
     if id != " ":
+        # if id != vorigid:
         print("ID: %s\nText: %s" % (id, text))
         naam = text
         answer = DataRepository.read_rfid(id, naam)
-        socketio.emit('B2F_refresh_history', broadcast=True)
+        socketio.emit('B2F_refresh_history', {"id": id, "naam": naam}, broadcast=True)
+        socketio.emit('B2F_name', {"naam":naam}, broadcast=True)
+        time.sleep(0.5)
+
+        # else:
+        #     print("succesvol ingelogd")
+        #     print("ID: %s\nText: %s" % (id, text))
+        #     naam = text
+        #     answer = DataRepository.read_rfid(id, naam)
+        #     socketio.emit('B2F_refresh_history', broadcast=True)
+    
+
+
+#-------------------MPU6502------------------#
+accel_addr = 0x68
+accel_res = 2
+accelerometer = MPU6050(accel_addr, accel_res)
+
+
+start_time_temp = time.time()
+write_speed_temp = 5  # LOG TEMPERATURE EVERY X SECONDS
+
+start_time_ldr = start_time_temp
+write_speed_ldr = 20  # LOG LDR VALUE EVERY X SECONDS
+
+start_time_accel = start_time_temp
+write_speed_accel = 0.5  # LOG ACCELERATION VALUE EVERY X SECONDS
+threshold_accel = 0.5
+
+start_time_angle = start_time_temp
+write_speed_angle = 0.5  # LOG ANGLE VALUE EVERY X SECONDS
+threshold_angle = 10
+
+
+logging = False
+rideid = 1
+
+counter2 = 0
+temp_rot_x = 0
+temp_accel_y = 0
+
+
+def get_accel_values():
+    global rotation_x, rotation_y, accel_x, accel_y, start_time_ldr, write_speed_ldr, start_time_accel, start_time_angle, accelerometer, counter2, ride_duration
+    global temp_rot_x, temp_accel_y, avg_rot_x, avg_accel_y
+    while True:
+        try:
+            rotation_x = round(accelerometer.get_x_rotation())
+            rotation_y = round(accelerometer.get_y_rotation())
+            accel_x = round(accelerometer.read_axis(0), 2)
+            accel_y = round(accelerometer.read_axis(1), 2)
+
+            if counter2 < 10:
+                counter2 += 1
+                temp_rot_x += rotation_x
+                temp_accel_y += accel_y
+                print(format(temp_accel_y, ".0f"))
+                time.sleep(1)
+            else:
+                avg_rot_x = round(temp_rot_x/10)
+                avg_accel_y = round(temp_accel_y/10, 2)
+                temp_rot_x = 0
+                temp_accel_y = 0
+                counter2 = 0
+                time.sleep(1)
+
+        except Exception as e:
+            print(f'Fout bij het inlezen: {e}')
 
 
 def start_thread_rfid():
@@ -147,6 +234,7 @@ def start_chrome_kiosk():
     driver.get("http://localhost")
     while True:
         pass
+        time.sleep(0.1)
 
 
 def start_chrome_thread():
@@ -154,6 +242,7 @@ def start_chrome_thread():
     chromeThread = threading.Thread(
         target=start_chrome_kiosk, args=(), daemon=True)
     chromeThread.start()
+    time.sleep(0.5)
 
 
 # ANDERE FUNCTIES
@@ -161,14 +250,19 @@ def start_chrome_thread():
 if __name__ == '__main__':
     try:
         setup_gpio()
-        start_thread_rfid()
-        # thread_show_ip = threading.Thread(target=show_ip)
-        # thread_show_ip.start()
+        thread_show_ip = threading.Thread(target=show_ip)
+        thread_show_ip.start()
+        # threading.Thread(target=get_accel_values).start()
+        threading.Thread(target=read_rfid).start()
         # start_thread()
         start_chrome_thread()
         print("**** Starting APP ****")
         socketio.run(app, debug=False, host='0.0.0.0')
     except KeyboardInterrupt:
         print('KeyboardInterrupt exception is caught')
+    except:
+        print("some error")
+
     finally:
-        GPIO.cleanup()
+        print("clean up")
+        GPIO.cleanup()  # cleanup all GPIO

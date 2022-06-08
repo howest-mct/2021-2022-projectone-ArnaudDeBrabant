@@ -25,3 +25,9 @@ class DataRepository:
         sql = "INSERT INTO gebruiker (RFID_tag, Naam) VALUES (%s, %s)"
         params = [RFID, naam]
         return Database.execute_sql(sql, params)
+
+    @staticmethod
+    def check_id(RFID):
+        sql = "SELECT RFID_tag from gebruiker WHERE RFID_tag = %s"
+        params = [RFID]
+        return Database.get_one_row(sql, params)
